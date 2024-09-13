@@ -92,8 +92,55 @@ Gui::~Gui()
     glfwTerminate();
 }
 
+// add colors for theme in future
 void Gui::ui_init()
 {}
+void Gui::drawLabSwitcher()
+{}
+
+void Gui::draw()
+{
+    static bool use_work_area = true;
+    
+    static ImGuiWindowFlags flags = ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoSavedSettings;
+    
+    const ImGuiViewport* viewport = ImGui::GetMainViewport();
+    ImGui::SetNextWindowPos(viewport->WorkPos);
+    ImGui::SetNextWindowSize(viewport->WorkSize);
+    
+    if (ImGui::Begin("Main window", nullptr, flags)) {
+        ImGui::PushFont(m_headerFont);
+        if (ImGui::Button("Lab1")) m_labState = LAB_1;
+        if (ImGui::Button("Lab2")) m_labState = LAB_2;
+        if (ImGui::Button("Lab3")) m_labState = LAB_3;
+        if (ImGui::Button("Lab4")) m_labState = LAB_4;
+        ImGui::PopFont();
+        
+        switch (m_labState) {
+            case LAB_1:
+                ImGui::Text("lab1");
+                break;
+                
+            case LAB_2:
+                ImGui::Text("lab2");
+                break;
+                
+            case LAB_3:
+                ImGui::Text("lab3");
+                break;
+                
+            case LAB_4:
+                ImGui::Text("lab4");
+                break;
+
+            default:
+                break;
+        }
+    }
+    ImGui::End();
+    
+//    ImGui::ShowDemoWindow();
+}
 
 void Gui::run()
 {
@@ -106,12 +153,7 @@ void Gui::run()
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
         
-        ImGui::Begin("Test");
-        ImGui::PushFont(m_headerFont);
-        ImGui::Text("Hello");
-        ImGui::PopFont();
-        
-        ImGui::End();
+        draw();
         
         ImGui::Render();
         int display_w, display_h;
